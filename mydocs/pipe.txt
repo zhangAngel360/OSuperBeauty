@@ -1,0 +1,2 @@
+sudo docker pull zhouzhouyi/os-contest:20260510
+Error response from daemon: failed to resolve reference "docker.io/zhouzhouyi/os-contest:20260510": failed to do request: Head "https://mirror.ccs.tencentyun.com/v2/zhouzhouyi/os-contest/manifests/20260510?ns=docker.io": dial tcp: lookup mirror.ccs.tencentyun.com on 211.142.211.124:53: no such host

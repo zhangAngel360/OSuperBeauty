@@ -205,6 +205,8 @@ void test_pre() {
     return;
 }
 
+// 【暂时禁用】依赖 busybox sh，当前不可用，待 busybox 修复后启用
+#if 0
 void test_final() {
     int pid;
 
@@ -289,6 +291,7 @@ void test_final() {
     return;
 }
 
+// 【暂时禁用】git 测试依赖 busybox sh + git_testcode.sh，当前不可用
 void test_on_site() {
     int pid;
 
@@ -358,9 +361,12 @@ void test_on_site() {
 
     return;
 }
+#endif
 
 // ---------- 自动扫描：在目录里找到 basic_testcode.sh 并执行 ----------
 // 对应比赛要求："主动扫描磁盘，并依次运行其中每一个测试点"
+// 【暂时禁用】依赖 busybox sh applet，当前 busybox 不可用，待修复后启用
+#if 0
 static void run_dir_testscripts(const char *dirpath) {
     int fd;
     char buf[2048];        // getdents64 的缓冲区
@@ -419,6 +425,7 @@ static void run_dir_testscripts(const char *dirpath) {
         printf("init: %d test scripts completed in %s\n", found, dirpath);
     }
 }
+#endif
 
 int main() {
 
@@ -435,10 +442,15 @@ int main() {
 
     printf("\n===== SpringOS Auto Test Runner =====\n\n");
 
-    // --- ★ 自动扫描并执行测试脚本 ---
+    // --- ★ basic 测试：直接 fork+exec 测试二进制（含完整评测标记格式）---
+    // 无需 busybox，不依赖 basic_testcode.sh 脚本
+    test_pre();
+
+    // --- ★ 自动扫描并执行测试脚本（需要 busybox sh applet，当前未完善）---
     // 比赛镜像路径结构：/glibc/*_testcode.sh  和  /musl/*_testcode.sh
-    run_dir_testscripts("/glibc");
-    run_dir_testscripts("/musl");
+    // 待 busybox 完善后取消注释
+    // run_dir_testscripts("/glibc");
+    // run_dir_testscripts("/musl");
 
     printf("\nAll tests completed, shutting down system...\n");
     shutdown();

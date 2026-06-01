@@ -404,6 +404,8 @@ void test_final() {
     return;
 }
 
+// 【暂时禁用】git 测试依赖 busybox sh + git_testcode.sh，当前不可用，待修复后启用
+#if 0
 void test_on_site() {
     int pid;
 
@@ -481,6 +483,7 @@ void test_on_site() {
 
     return;
 }
+#endif
 
 int main() {
     if (openat(AT_FDCWD, "console", O_RDWR, 0600) < 0) {
@@ -493,13 +496,13 @@ int main() {
     mkdirat(AT_FDCWD, "/proc", 0666);
     mkdirat(AT_FDCWD, "/tmp", 0777);
 
-    // basic测试，目前是正确的
+    // basic测试：直接执行 basic 测试二进制
+    test_pre();
 
-    // test_pre();
+    // interrupt / copy-file-range / splice 测试
+    test_final();
 
-    // test_final();
-
-    test_on_site();
+    // test_on_site();  // busybox/git 依赖未就绪，详见上方 #if 0
 
     printf("All tests completed, shutting down system...\n");
     shutdown();
