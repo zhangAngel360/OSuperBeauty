@@ -611,6 +611,7 @@ clean:
 	 include/ramdisk_img.h \
 	 ramdisk.img ramdisk.o ramdisk-embed.o \
 	 ramdisk-2k1000.img ramdisk-2k1000.o ramdisk-embed-2k1000.o \
+	 sdcard-*.img \
 	$(UPROGS_RV) $(UPROGS_LA)
 
 # try to generate a unique GDB port
@@ -678,4 +679,32 @@ qemu-gdb-la: kernel-la .gdbinit
 	@echo "*** Now run 'gdb' in another window." 1>&2
 	$(QEMU_LA) $(QEMUOPTS_LA) -S $(QEMUGDB_LA)
 
-.PHONY: all qemu qemu-la qemu-gdb qemu-gdb-la clean tags qemu-sh qemu-la-sh vf2
+# === 测评相关目标 ===
+
+# 清理测评产生的镜像文件
+clean-test:
+	rm -f sdcard-*.img
+
+clean-testlog:
+	rm -f os_serial_out_*.txt
+
+# 一键测评：先清理残留 img，再构建并运行测评
+# 使用方式: make test
+# 如需指定架构: make test-rv  或  make test-la
+test: clean-test kernel-rv sdcard-rv.img
+	docker run --rm \
+		-v $(PWD):/coursegrader/submit \
+		-v /home/zhangshuoyu/oscomp-testdata:/coursegrader/testdata \
+		-v /home/zhangshuoyu/autotest-for-oskernel:/cg \
+		-v /home/zhangshuoyu/oscomp-testdata:/mnt/cghook/ \
+		zhouzhouyi/os-contest:20260510 python3 /cg/kernel.zip
+
+test-la: clean-test kernel-la sdcard-la.img
+	docker run --rm \
+		-v $(PWD):/coursegrader/submit \
+		-v /home/zhangshuoyu/oscomp-testdata:/coursegrader/testdata \
+		-v /home/zhangshuoyu/autotest-for-oskernel:/cg \
+		-v /home/zhangshuoyu/oscomp-testdata:/mnt/cghook/ \
+		zhouzhouyi/os-contest:20260510 python3 /cg/kernel.zip
+
+.PHONY: all qemu qemu-la qemu-gdb qemu-gdb-la clean tags qemu-sh qemu-la-sh vf2 clean-test test test-la

@@ -13,3 +13,4 @@
 | `07-basic-test-fix.md` | 🔧 RISC-V Basic 测试修复报告：诊断 0 分根因、修复 init-rv.c/init-la.c、后续待修复项 | 2026-06-01 15:01 |
 | `08-score-analysis.md` | 📊 Basic 测试逐题得分分析：32 题逐题评分对照、RISC-V 96%/LoongArch 100%、后续 P0-P5 修改清单 | 2026-06-01 18:38 |
 | `09-competition-strategy.md` | 🏆 初赛晋级形势分析：237 队分层画像、分数线估算、最优攻略路线（P0-P4）、时间线建议 | 2026-06-01 18:59 |
+| `10-docker-test-flow.md` | 🔁 Docker 测评工作流优化：gzip 残留报错根因、Makefile 一键测评目标、目录权限只读设置 | 2026-06-02 15:18 |
